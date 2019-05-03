@@ -1,4 +1,4 @@
-module.exports = function asdf(){
+function asdf(){
 
 	this.players = [];
 	this.x = 5;
@@ -22,3 +22,4 @@ module.exports = function asdf(){
 	};
 };
 
+module.exports = new asdf();
