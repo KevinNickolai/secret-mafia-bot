@@ -8,19 +8,21 @@ const client = new Discord.Client();
 
 const LobbyClass = require('./classes/lobby.js');
 
-//const playerPool = new LobbyClass.asdf();
-
 fs.readdir('./events/', (err, files) => {
   files.forEach(file => {
     const eventHandler = require(`./events/${file}`);
 	const eventName = file.split('.')[0];
-    client.on(eventName, (...args) => eventHandler(client, ...args));
+	if(eventName === 'message'){
+		var args = [LobbyClass];
+		client.on(eventName, (...args) => eventHandler(client, ...args));
+	}
+	else{
+		client.on(eventName, (...args) => eventHandler(client, ...args));
+	}
   });
 });
 
-console.log(LobbyClass.x);
-
-
+LobbyClass.displayPlayers();
 
 
 /**
