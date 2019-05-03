@@ -1,7 +1,8 @@
-function Lobby(){
-	this.players = [];
+module.exports = function asdf(){
 
-	obj.addPlayer(player) = function(){
+	this.players = [];
+/**
+	this.addPlayer(player) = function(){
 		if(this.containsPlayer(player)){
 			return true;
 		}else{
@@ -11,12 +12,13 @@ function Lobby(){
 
 	//function indicating if the player is already in the current Lobby
 	//returns true if player is in lobby, false otherwise
-	obj.containsPlayer(player) = function(){
+	this.containsPlayer(player) = function(){
 		for(i = 0; i < players.length; ++i){
 			if(players[i] === player){
 				return true;
 			}
 		}
 		return false;
-	}
-}
+	};*/
+};
+

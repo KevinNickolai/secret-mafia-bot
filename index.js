@@ -6,6 +6,9 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const client = new Discord.Client();
 
+//const LobbyClass = require('./classes/lobby.js').asdf;
+//const playerPool = new LobbyClass.asdf();
+
 fs.readdir('./events/', (err, files) => {
   files.forEach(file => {
     const eventHandler = require(`./events/${file}`);
@@ -14,9 +17,9 @@ fs.readdir('./events/', (err, files) => {
   });
 });
 
-const lobbyClass = require('./classes/lobby.js');
 
-const lobby = new lobbyClass.Lobby();
+
+
 
 /**
 client.on('ready', () => {
