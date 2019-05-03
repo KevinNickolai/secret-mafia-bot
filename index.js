@@ -22,9 +22,6 @@ fs.readdir('./events/', (err, files) => {
   });
 });
 
-LobbyClass.displayPlayers();
-
-
 /**
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)

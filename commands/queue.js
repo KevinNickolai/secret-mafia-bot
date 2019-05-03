@@ -4,5 +4,7 @@ module.exports = (message, lobby) => {
 
 	lobby.addPlayer(userToAdd);
 
+	lobby.displayPlayers();
+
 	return message.reply('you\'re queued!');
 }
