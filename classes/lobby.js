@@ -1,7 +1,7 @@
 module.exports = function asdf(){
 
 	this.players = [];
-/**
+	this.x = 5;
 	this.addPlayer(player) = function(){
 		if(this.containsPlayer(player)){
 			return true;
@@ -19,6 +19,6 @@ module.exports = function asdf(){
 			}
 		}
 		return false;
-	};*/
+	};
 };
 

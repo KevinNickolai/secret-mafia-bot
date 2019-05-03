@@ -7,6 +7,7 @@ const fs = require('fs');
 const client = new Discord.Client();
 
 const LobbyClass = require('./classes/lobby.js').asdf;
+
 //const playerPool = new LobbyClass.asdf();
 
 fs.readdir('./events/', (err, files) => {
@@ -17,6 +18,7 @@ fs.readdir('./events/', (err, files) => {
   });
 });
 
+console.log(LobbyClass.x);
 
 
 
