@@ -13,6 +13,11 @@ fs.readdir('./events/', (err, files) => {
     client.on(eventName, (...args) => eventHandler(client, ...args));
   });
 });
+
+const lobbyClass = require('./classes/lobby.js');
+
+const lobby = new lobbyClass.Lobby();
+
 /**
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
