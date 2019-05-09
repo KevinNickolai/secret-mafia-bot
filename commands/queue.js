@@ -1,10 +1,12 @@
 module.exports = (message, lobby) => {
 
-	const userToAdd = message.author;
+	//the user that sent the message is the one trying to queue or dequeue
+	const user = message.author;
 
-	lobby.addPlayer(userToAdd);
-
-	lobby.displayPlayers();
-
-	return message.reply('you\'re queued!');
+	//command for queuing the player
+	if(message.content === "!q"){
+		return lobby.addPlayer(user);
+	}else if(message.content === "!dq"){ //<command for dequeuing the player
+		return lobby.removePlayer(user);
+	}
 }

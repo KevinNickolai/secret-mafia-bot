@@ -12,19 +12,20 @@ fs.readdir('./events/', (err, files) => {
   files.forEach(file => {
     const eventHandler = require(`./events/${file}`);
 	const eventName = file.split('.')[0];
+
+	//handle events of specific names
 	if(eventName === 'message'){
-		var args = [LobbyClass];
-		client.on(eventName, (...args) => eventHandler(client, ...args));
+		//console.log(LobbyClass);
+		client.on(eventName, (...args) => eventHandler(client, ...args, LobbyClass));
 	}
-	else{
+	else if(eventName === 'ready'){
+		client.once(eventName, (...args) => LobbyClass.setQueueChannel(client, eventHandler(client, ...args)));
+		//console.log(LobbyClass);
+	}
+	else{ //handle all other events
 		client.on(eventName, (...args) => eventHandler(client, ...args));
 	}
   });
 });
-
-/**
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`)
-})*/
 
 client.login(process.env.BOT_TOKEN);
