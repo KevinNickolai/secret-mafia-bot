@@ -9,6 +9,8 @@ function Lobby(){
 	this.queueMessage;// = '```Queue \n-----```';
 };
 
+
+
 /*
 * Updates the lobby's currently displayed queue
 */
@@ -43,10 +45,10 @@ Lobby.prototype.clear = function(){
 */
 Lobby.prototype.start = function(){
 	for(var i = 0; i < this.players.length; ++i){
-		this.players[i].send("Game started");
+		this.players[i].player.send("Game started");
 	}
 
-	this.clear();			
+	this.clear();
 }
 
 /*
@@ -54,14 +56,15 @@ Lobby.prototype.start = function(){
 * @param {User} player The player we're attempting to add to the lobby
 * @return {boolean} true if successfully added player to queue, false otherwise
 */
-Lobby.prototype.addPlayer = function(player){
+Lobby.prototype.addPlayer = function(player,time){
 
 		//checking that the player isn't already in the lobby
 		if(!this.containsPlayer(player)){
 
+			const playerTimer = new PlayerTimer(player,time,this);
 			//successful, non-duplicate player addition
-			this.players.push(player);
-			player.send("Queued!");
+			this.players.push(playerTimer);
+			player.send("Queued for " + time + " minutes!");
 
 			//if we've hit the threshold of minimum players for a game, we start
 			if(this.players.length >= this.minimumPlayers){
@@ -70,6 +73,8 @@ Lobby.prototype.addPlayer = function(player){
 
 			//update the queue message after game start or single player addition
 			this.updateQueueMessage();
+
+			//console.log(playerTimer);
 			return true;
 		}
 		//failure, attempted to add a player already in queue
@@ -83,7 +88,7 @@ Lobby.prototype.addPlayer = function(player){
 */
 Lobby.prototype.containsPlayer = function(player){
 		for(i = 0; i < this.players.length; ++i){
-			if(this.players[i] === player){
+			if(this.players[i].player === player){
 				return true;
 			}
 		}
@@ -98,7 +103,7 @@ Lobby.prototype.displayPlayers = function(){
 
 	var retPlayersString = "";
 	for(i = 0; i < this.players.length; ++i){
-		retPlayersString += this.players[i].username + ' \n';
+		retPlayersString += this.players[i].player.username + ' \n';
 	}
 
 	return retPlayersString;
@@ -107,14 +112,20 @@ Lobby.prototype.displayPlayers = function(){
 /*
 * Attepmt to remove a player from the current lobby
 * @param {User} the player we're attempting to remove
+* @param {boolean} toTime flag indicating 
 * @return {boolean} true if the player was removed successfully, false otherwise
 */
-Lobby.prototype.removePlayer = function(player){
+Lobby.prototype.removePlayer = function(player,toTime = false){
 
 	var ret = false;
 	for(var i = 0; i < this.players.length; ++i){
-		if(this.players[i] === player){
-			player.send('You\'re unqueued!');
+		if(this.players[i].player === player){
+
+			if(!toTime){
+				player.send('You\'re unqueued!');
+			}
+
+			this.players[i].clearTimer();
 			this.players.splice(i,1);
 			ret = true;
 		}
@@ -128,7 +139,13 @@ Lobby.prototype.removePlayer = function(player){
 
 	return ret;
 }
+Lobby.prototype.playerTimeout = function(player){
 
+	console.log(this.minimumPlayers);
+	if(this.removePlayer(player,true)){
+		player.send('Dequeued due to time; requeue if you\'re still available to play.');
+	}
+}
 /*
 * Get the size of the lobby
 * @return {number} the number of users in the lobby currently
@@ -161,6 +178,21 @@ Lobby.prototype.setQueueChannel = async function(client, channel){
 	this.updateQueueMessage();
 
 	console.log("queue ready");
+}
+
+class PlayerTimer{
+	constructor(player, time, lobby) {
+		this.player = player;
+
+		var that = lobby;
+		this.timer = setTimeout(function() {
+			that.playerTimeout(player);
+		},time * 60 * 1000);
+	}
+}
+
+PlayerTimer.prototype.clearTimer = function(){
+	clearTimeout(this.timer);
 }
 
 module.exports = new Lobby();
