@@ -1,7 +1,8 @@
 //command/argument help taken from discordjs documents found here
 //https://discordjs.guide/creating-your-bot/commands-with-user-input.html#basic-arguments
 
-const queue = require('../commands/queue')
+const queue = require('../commands/queue');
+const roles = require('../commands/roles');
 
 module.exports = (client, message, lobby) => {
 
@@ -28,9 +29,17 @@ module.exports = (client, message, lobby) => {
 	//console.log('arguments: ');
 	//console.log(args);
 	
-	//attempted queue commands
-	if(command === queue.cmdQueue || command === queue.cmdDequeue){
-		queue.queue(command, args, user, lobby);
+	switch(command){
+		case queue.cmdQueue:
+		case queue.cmdDequeue:
+			queue.onQueue(command, args, user, lobby);
+			break;
+
+		case roles.cmdRoles:
+			roles.onRoles(user);
+			break;
+
+		default:
+			user.send('Error: no command \'' + command + '\' found.');
 	}
-	
 }

@@ -23,11 +23,11 @@ cmdDequeue: dequeueCommand,
 * @param {User} user The user that requested a queue command
 * @param {Lobby} lobby The lobby the user is queuing for
 */
-queue: function(command, args, user, lobby) {
+onQueue: function(command, args, user, lobby) {
 
 	//command for queuing the player
 	if(command === queueCommand){
-		
+			
 		//variable to hold our queuing time
 		var queueTime = defaultQueueTime;
 
@@ -60,9 +60,6 @@ queue: function(command, args, user, lobby) {
 		//decide which prompt to send to the user, based on their previous queue status.
 		requeued ? user.send('Requeued for ' + queueTime + ' minutes!') : 
 				   user.send('Queued for ' + queueTime + ' minutes!');
-
-		//Add a player to the lobby with a given time.
-		//return requeued;
 	}else if(command === dequeueCommand){ //<command for dequeuing the player
 
 		const dequeued = lobby.removePlayer(user);
@@ -70,7 +67,6 @@ queue: function(command, args, user, lobby) {
 		//decide which prompt to send to the user, depending on their queue status.
 		dequeued ? user.send('You\'re unqueued!') : 
 				   user.send('You weren\'t even queued!');
-		//return dequeued;
 	}
 }
 }
