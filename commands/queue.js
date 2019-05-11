@@ -51,10 +51,26 @@ queue: function(command, args, user, lobby) {
 			}
 		}
 
+		const requeued = lobby.containsPlayer(user);
+
+		const gameStarted = lobby.addPlayer(user,queueTime);
+
+		if(gameStarted) return;
+
+		//decide which prompt to send to the user, based on their previous queue status.
+		requeued ? user.send('Requeued for ' + queueTime + ' minutes!') : 
+				   user.send('Queued for ' + queueTime + ' minutes!');
+
 		//Add a player to the lobby with a given time.
-		return lobby.addPlayer(user, queueTime);
+		//return requeued;
 	}else if(command === dequeueCommand){ //<command for dequeuing the player
-		return lobby.removePlayer(user);
+
+		const dequeued = lobby.removePlayer(user);
+		
+		//decide which prompt to send to the user, depending on their queue status.
+		dequeued ? user.send('You\'re unqueued!') : 
+				   user.send('You weren\'t even queued!');
+		//return dequeued;
 	}
 }
 }

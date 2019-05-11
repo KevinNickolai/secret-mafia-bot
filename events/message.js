@@ -30,7 +30,7 @@ module.exports = (client, message, lobby) => {
 	
 	//attempted queue commands
 	if(command === queue.cmdQueue || command === queue.cmdDequeue){
-		return queue.queue(command, args, user, lobby);
+		queue.queue(command, args, user, lobby);
 	}
 	
 }
