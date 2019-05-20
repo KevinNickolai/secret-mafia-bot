@@ -51,9 +51,9 @@ class DatabaseWrapper {
 	async init(){
 		var that = this;
 
-		return new Promise((resolve, rejcet) => {
+		return new Promise((resolve, reject) => {
 			
-			var sql = `CREATE DATABASE IF NOT EXISTS ${that.connection.database};`;
+			var sql = `CREATE DATABASE IF NOT EXISTS ${that.config.database};`;
 
 			that.query(sql)
 			.then(function(result){
@@ -63,7 +63,7 @@ class DatabaseWrapper {
 				//for mysql
 				return new Promise((resolve,reject) => {
 					that.connection.changeUser({
-						database: that.connection.database
+						database: that.config.database
 					}, (err, rows) => {
 						if(err){
 							console.log("error in setting database to connection user", err);
