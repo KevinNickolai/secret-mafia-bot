@@ -1,9 +1,3 @@
-//declare queue and dequeue command texts here,
-//so that they can be changed and referenced all in
-//one place
-const queueCommand = 'q';
-const dequeueCommand = 'dq';
-
 //minimum, maximum, default queue argument times
 //times here are in minutes
 const minimumQueueTime = 20;
@@ -12,22 +6,17 @@ const maximumQueueTime = 180;
 
 module.exports = {
 
-//export the commands for queuing and dequeuing for processing of commands elsewhere
-cmdQueue: queueCommand,
-cmdDequeue: dequeueCommand,
+	//export the commands for queuing and dequeuing for processing of commands elsewhere
+	name: 'queue',
+	aliases: ['q'],
+	description: "Queues the user for a Mafia game for a given amount of time (in minutes).",
+	usage: `<time (minimum: ${minimumQueueTime}, maximum: ${maximumQueueTime}, default: ${defaultQueueTime}>`,
+	execute(message, args){
 
-/*
-* function for processing confirmed queue commands
-* @param {string} command The command string
-* @param {array} args The arguments to the command
-* @param {User} user The user that requested a queue command
-* @param {Lobby} lobby The lobby the user is queuing for
-*/
-onQueue: function(command, args, user, lobby) {
+		const { lobby } = message.client;
 
-	//command for queuing the player
-	if(command === queueCommand){
-			
+		const user = message.author;
+
 		//variable to hold our queuing time
 		var queueTime = defaultQueueTime;
 
@@ -59,15 +48,8 @@ onQueue: function(command, args, user, lobby) {
 
 		//decide which prompt to send to the user, based on their previous queue status.
 		requeued ? user.send('Requeued for ' + queueTime + ' minutes!') : 
-				   user.send('Queued for ' + queueTime + ' minutes!');
-	}else if(command === dequeueCommand){ //<command for dequeuing the player
-
-		const dequeued = lobby.removePlayer(user);
-		
-		//decide which prompt to send to the user, depending on their queue status.
-		dequeued ? user.send('You\'re unqueued!') : 
-				   user.send('You weren\'t even queued!');
+					user.send('Queued for ' + queueTime + ' minutes!');
 	}
 }
-}
+
 

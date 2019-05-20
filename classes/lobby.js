@@ -9,8 +9,6 @@ function Lobby(){
 	this.queueMessage;// = '```Queue \n-----```';
 };
 
-
-
 /*
 * Updates the lobby's currently displayed queue
 */
