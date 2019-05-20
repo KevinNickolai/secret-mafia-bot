@@ -18,10 +18,12 @@ class DatabaseWrapper {
 		this.connection = mysql.createConnection(config);
 		this.setupTableName = "setups";
 
+		var that = this;
+
 		this.connection.on('error', function(err){
 			console.log("Database Error", err);
 			if(err.code === 'PROTOCOL_CONNECTION_LOST'){
-				this.handleDisconnect();
+				that.handleDisconnect();
 			} else{
 				throw err;
 			}
@@ -36,17 +38,19 @@ class DatabaseWrapper {
 	handleDisconnect(){
 		this.connection = mysql.createConnection(this.config);
 
+		var that = this;
+
 		this.connection.connect(function(err){
 			if(err){
 				console.log("Error when reconnecting to database: ", err);
-				setTimeout(handleDisconnect, 2000);
+				setTimeout(that.handleDisconnect, 2000);
 			}
 		});
 
 		this.connection.on('error', function(err){
 			console.log("Database Error", err);
 			if(err.code === 'PROTOCOL_CONNECTION_LOST'){
-				handleDisconnect();
+				that.handleDisconnect();
 			} else{
 				throw err;
 			}
