@@ -33,6 +33,11 @@ module.exports = (client, message) => {
 		return;
 	}
 
+	//Checking for arguments if a command requires arguments to be present
+	if(command.args && !args.length){
+		return user.send("You must provide arguments for the " + commandName + " command.");
+	}
+
 	try{
 		command.execute(message,args);
 	} catch(error){

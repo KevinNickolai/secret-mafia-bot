@@ -1,12 +1,11 @@
 //Created from tutorial on
 //https://medium.freecodecamp.org/how-to-create-a-discord-bot-under-15-minutes-fb2fd0083844
 
-require('dotenv').config();
+const config = require('./config.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
-
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -19,6 +18,10 @@ for (const file of commandFiles) {
 
 //set the client's lobby
 client.lobby = require('./classes/lobby.js');
+
+const dbWrapper = new (require('./classes/databaseWrapper.js'))(config.dbConfig);
+dbWrapper.init();
+client.database = dbWrapper;
 
 fs.readdir('./events/', (err, files) => {
   files.forEach(file => {
@@ -34,4 +37,4 @@ fs.readdir('./events/', (err, files) => {
   });
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(config.botToken);
