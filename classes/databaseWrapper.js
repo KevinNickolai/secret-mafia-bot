@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 
 const dbName = 'MafiaDB';
+
 /*
 * class that wraps a mysql database into utilizing promises
 * class inspiration found here:
@@ -16,6 +17,40 @@ class DatabaseWrapper {
 		this.config = config;
 		this.connection = mysql.createConnection(config);
 		this.setupTableName = "setups";
+
+		this.connection.on('error', function(err){
+			console.log("Database Error", err);
+			if(err.code === 'PROTOCOL_CONNECTION_LOST'){
+				handleDisconnect();
+			} else{
+				throw err;
+			}
+		});
+	}
+
+	/*
+	* Handles disconnection from the database at any time
+	* solution to problem found here:
+	* https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+	*/
+	handleDisconnect(){
+		this.connection = mysql.createConnection(this.config);
+
+		this.connection.connect(function(err){
+			if(err){
+				console.log("Error when reconnecting to database: ", err);
+				setTimeout(handleDisconnect, 2000);
+			}
+		});
+
+		this.connection.on('error', function(err){
+			console.log("Database Error", err);
+			if(err.code === 'PROTOCOL_CONNECTION_LOST'){
+				handleDisconnect();
+			} else{
+				throw err;
+			}
+		});
 	}
 
 	/*
