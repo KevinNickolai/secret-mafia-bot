@@ -42,7 +42,7 @@ module.exports = (client, message) => {
 	try{
 		command.execute(message,args);
 	} catch(error){
-		console.error("Error processing command " + commandName ":", error);
+		console.error("Error processing command " + commandName + ":", error);
 		return user.send("Error processing command '" + commandName + "'.");
 	}
 }
