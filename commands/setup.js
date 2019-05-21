@@ -13,9 +13,14 @@ module.exports = {
 					<${randomArgs.join("/")}> <playerNumber> | Get a random setup from the list`,
 	args: true,
 	execute(message,args){
+
 		const { database } = message.client;
 
 		const firstArg = args.shift().toLowerCase();
+
+		//TODO: Polish this if-else chain to be a series of subcommands
+		//for !setup; make the first argument handling modular, so each
+		//possible first argument can use the same call structure
 
 		//add a setup
 		if(firstArg === addArg){
@@ -45,13 +50,12 @@ module.exports = {
 
 			database.query(sql)
 			.then(function(result){
-				console.log(`User ${message.author} Added setup ${setupCode} for ${playerNumber} players.`);
+				console.log(`User ${message.author.tag} Added setup ${setupCode} for ${playerNumber} players.`);
 				return message.author.send(`Added setup ${setupCode} for ${playerNumber} players.`);
 			})
 			.catch(function(error){
 				console.log(error);
 			});
-
 		} else if(firstArg === removeArg){ //< remove a setup
 			
 			if(!args.length){
@@ -63,12 +67,11 @@ module.exports = {
 
 			database.query(sql)
 			.then(function(result){
-				console.log(`User ${message.author} Removed setup ${setupCode} from random setup selection.`);
+				console.log(`User ${message.author.tag} Removed setup ${setupCode} from random setup selection.`);
 				return message.author.send(`Removed setup ${setupCode} from random setup selection.`);
 			}).catch(function(error){
 				console.log(error);
 			});
-
 		} else if(randomArgs.includes(firstArg)){ //< random a setup
 			
 			var sql;

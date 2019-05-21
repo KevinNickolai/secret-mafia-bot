@@ -25,12 +25,13 @@ module.exports = (client, message) => {
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
+	//retrieve a command that has a name or alias of commandName
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if(!command){
-		console.log("No command '" + commandName + "' exists.");
-		return;
+		//console.log("No command '" + commandName + "' exists.");
+		return user.send("No command '" + commandName + "' exists.");
 	}
 
 	//Checking for arguments if a command requires arguments to be present
@@ -41,18 +42,7 @@ module.exports = (client, message) => {
 	try{
 		command.execute(message,args);
 	} catch(error){
-		console.error(error);
-		user.send('Error: no command \'' + commandName + '\' found.');
+		console.error("Error processing command " + commandName ":", error);
+		return user.send("Error processing command '" + commandName + "'.");
 	}
-	
-//	switch(command){
-	//	case queue.cmdQueue:
-		//case queue.cmdDequeue:
-			//queue.onQueue(command, args, user, lobby);
-			//break;
-
-		//case roles.cmdRoles:
-			//roles.onRoles(user);
-			//break;
-	//}
 }

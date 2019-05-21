@@ -18,12 +18,17 @@ class DatabaseWrapper {
 		this.connection = mysql.createConnection(config);
 		this.setupTableName = "setups";
 
+		//TODO: Create a separate Table object for each 
+		//table the database requires to function
+
 		var that = this;
 
+		//Keep the database connection open, querying at least once every minute
 		setInterval(function() {
 			that.query('SELECT 1');
 		},45000);
 
+		//Catch any errors that result in database connection loss, and establish a new connection
 		this.connection.on('error', function(err){
 			console.log("Database Error", err);
 			if(err.code === 'PROTOCOL_CONNECTION_LOST'){
@@ -91,13 +96,16 @@ class DatabaseWrapper {
 		});
 	}
 
+	/*
+	* Initialize the database
+	*/
 	async init(){
 		var that = this;
 
 		return new Promise((resolve, reject) => {
 			
+			//create a database if it doesn't already exist
 			var sql = `CREATE DATABASE IF NOT EXISTS ${that.config.database};`;
-
 			that.query(sql)
 			.then(function(result){
 
@@ -121,6 +129,7 @@ class DatabaseWrapper {
 				throw err;
 			}).then(function(result){
 
+				//columns for the setupTable
 				var columns = `
 				(setupCode VARCHAR(255) PRIMARY KEY,
 				playerNumber TINYINT)
@@ -131,6 +140,8 @@ class DatabaseWrapper {
 				return that.query(sql);
 			}).then(function(result){
 				console.log("Database Initialization complete.");
+
+				return resolve(result);
 			});
 		});
 	}

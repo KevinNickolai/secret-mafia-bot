@@ -8,6 +8,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+//set a command for each file in the commands directory
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -19,19 +20,26 @@ for (const file of commandFiles) {
 //set the client's lobby
 client.lobby = require('./classes/lobby.js');
 
+/*
+* Create and initialize a database
+*/
 const dbWrapper = new (require('./classes/databaseWrapper.js'))(config.dbConfig);
 dbWrapper.init();
 client.database = dbWrapper;
 
+/*
+* Set event handlers for all possible client events
+*/
 fs.readdir('./events/', (err, files) => {
   files.forEach(file => {
     const eventHandler = require(`./events/${file}`);
 	const eventName = file.split('.')[0];
 
+	// Handle the ready event only one time
 	if(eventName === 'ready'){
 		client.once(eventName, (...args) => eventHandler(client, ...args));
 	}
-	else{ //handle all other events
+	else{ //< handle all other events
 		client.on(eventName, (...args) => eventHandler(client, ...args));
 	}
   });

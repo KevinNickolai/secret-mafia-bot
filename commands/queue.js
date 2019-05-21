@@ -5,14 +5,13 @@ const defaultQueueTime = 30;
 const maximumQueueTime = 180;
 
 module.exports = {
-
-	//export the commands for queuing and dequeuing for processing of commands elsewhere
 	name: 'queue',
 	aliases: ['q'],
 	description: "Queues the user for a Mafia game for a given amount of time (in minutes).",
 	usage: `<time (minimum: ${minimumQueueTime}, maximum: ${maximumQueueTime}, default: ${defaultQueueTime}>`,
 	execute(message, args){
 
+		//get the lobby object from the client
 		const { lobby } = message.client;
 
 		const user = message.author;

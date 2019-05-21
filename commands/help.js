@@ -4,13 +4,17 @@ module.exports = {
 	description: "Gives information on specific commands or lists all possible commands.",
 	usage: "<command name>",
 	execute(message,args){
+		//empty array to store data we will display to the user
 		const data = [];
+
+		//client's commands to display for the help command
 		const { commands } = message.client;
 		const { prefix } = require('../config.js');
 
 		//if there are no arguments, we are doing a general help command
 		//i.e. no specific command info, just a list of commands.
 		if(!args.length){
+
 			data.push("List of commands:");
 			data.push(commands.map(command => command.name).join(', '));
 			data.push(`\nUse \'${prefix}help <command name>\' for help on specific commands.`);
@@ -26,7 +30,8 @@ module.exports = {
 				})
 		} else{ //< specific command help info
 			const name = args[0].toLowerCase();
-			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+			const command = commands.get(name) 
+					|| commands.find(c => c.aliases && c.aliases.includes(name));
 
 			if(!command){
 				return message.author.send(`'${name} is not a valid command.`);
@@ -38,7 +43,9 @@ module.exports = {
 			if(command.description) data.push(`*Description:* ${command.description}`);
 			if(command.usage) data.push(`*Usage:* ${prefix}${command.name} ${command.usage}`);
 
-			message.author.send(data, { split: true});
+			//send the user the help data; split will split the
+			//message if it surpasses discord's character limit
+			message.author.send(data, { split: true });
 		}
 	}
 }
