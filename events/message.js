@@ -2,23 +2,37 @@
 //https://discordjs.guide/creating-your-bot/commands-with-user-input.html#basic-arguments
 //https://discordjs.guide/command-handling/adding-features.html#a-dynamic-help-command
 module.exports = (client, message) => {
-
-	//the lobby we use for queuing
-	const { lobby } = client;
-
+	
 	//prefix for commands
 	const { prefix } = require('../config.js');
 
-	//if the channel the message was sent in was the lobby channel, delete the message from the channel
-	if(message.channel.id === lobby.lobbyChannel().id){
-		message.delete();
+	//console.log(message);
+
+	if(!message.guild){
+		console.log("command send in dms");
+		return;
 	}
+
+	console.log("???");
+	const guildID = message.guild.id;
 
 	//if the message isn't a command or is a message from another bot, we don't need to process it
 	if(!message.content.startsWith(prefix) || message.author.bot) return;
 
-	//user that sent the message
-	const user = message.author;
+	//console.log(client.lobbyMap);
+
+	//the lobby we use for queuing
+	const lobby = client.lobbyMap.get(guildID);
+
+	//console.log(lobby);
+
+	//if the channel the message was sent in was the lobby channel, delete the message from the channel
+	if(message.channel.id === lobby.lobbyChannel().id){
+		message.delete()
+		.catch(function(error){
+			console.log(error);
+		});
+	}
 
 	//split up the message into arguments, with whitespace as the delimiter,
 	//while also removing the command prefix from the message
@@ -28,6 +42,9 @@ module.exports = (client, message) => {
 	//retrieve a command that has a name or alias of commandName
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
+	//user that sent the message
+	const user = message.author;
 
 	if(!command){
 		//console.log("No command '" + commandName + "' exists.");

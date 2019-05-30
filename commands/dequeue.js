@@ -5,7 +5,9 @@ module.exports = {
 	execute(message,args){
 		const user = message.author;
 
-		const { lobby } = message.client;
+		const lobby= message.client.lobbyMap.get(message.guild.id);
+
+		console.log(message.guild.id);
 		
 		const dequeued = lobby.removePlayer(user);
 		

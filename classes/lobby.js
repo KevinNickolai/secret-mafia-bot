@@ -12,12 +12,22 @@ function Lobby(){
 /*
 * Updates the lobby's currently displayed queue
 */
-Lobby.prototype.updateQueueMessage = function(){
-	this.queueMessage.edit(
-	'```Queue: ' + this.players.length + '/' + this.minimumPlayers +
-	'\n--------- \n' + 
-	this.displayPlayers() +
-	'```');
+Lobby.prototype.updateQueueMessage = async function(){
+
+	return new Promise((resolve,reject) => {
+		this.queueMessage.edit(
+		'```Queue: ' + this.players.length + '/' + this.minimumPlayers +
+		'\n--------- \n' + 
+		this.displayPlayers() +
+		'```')
+		.then(function(result){
+			resolve(result);
+		})
+		.catch(function(error){
+			reject(error);
+		});	
+	});
+
 }
 
 /*
@@ -160,20 +170,44 @@ Lobby.prototype.size = function(){
 
 /*
 * Set the queue channel the lobby will use to display and take queue requests
-* @param {Client} client The discord client connection that the bot interfaces with
 * @param {Channel} channel The discord text channel the bot uses for queue related information
 */
-Lobby.prototype.setQueueChannel = async function(client, channel){
+Lobby.prototype.setQueueChannel = async function(channel){
 	this.queueChannel = channel;
+	
+	/*do{
+		messageCount = this.queueChannel.fetchMessages({ limit: 2 });
+
+		await messageCount.then(function(messages){
+
+			console.log(messages);
+
+			return channel.bulkDelete(messages, true);
+		})
+		.then(function(result){
+			console.log(`Completed deletion of messages on server ${channel.guild.name}.`)
+		}).catch(function(error){
+			console.log(`error deleting messages on server  ${channel.guild.name}`,error);
+
+			console.log(messageCount);
+
+			process.exit(0);
+		});
+	}while(messageCount > 0);*/
+
 
 	//since this is an async function, we're using await to make sure that the 
 	//promise of the fetchMessage function goes through, so that this.queueMessage
 	//is actually a {Message} object, and not a prmoise.
-	this.queueMessage = await channel.fetchMessage('575842249536176158');
+	this.queueMessage = await channel.send("``` ```");
 
-	this.updateQueueMessage();
-
-	console.log("Lobby queue has successfully been initialized.");
+	await this.updateQueueMessage()
+	.then(function(result){
+		console.log("Lobby queue has successfully been initialized: channelID: ",channel.id);
+	})
+	.catch(function(error){
+		console.log("Failed to initialize lobby queue: ", error);
+	});
 }
 
 /*
@@ -223,4 +257,4 @@ PlayerTimer.prototype.setTimer = function(time){
 	},time * 60 * 1000);
 }
 
-module.exports = new Lobby();
+module.exports = Lobby;

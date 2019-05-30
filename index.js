@@ -18,7 +18,7 @@ for (const file of commandFiles) {
 }
 
 //set the client's lobby
-client.lobby = require('./classes/lobby.js');
+//client.lobby = require('./classes/lobby.js');
 
 /*
 * Create and initialize a database

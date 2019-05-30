@@ -11,8 +11,12 @@ module.exports = {
 	usage: `<time (minimum: ${minimumQueueTime}, maximum: ${maximumQueueTime}, default: ${defaultQueueTime}>`,
 	execute(message, args){
 
+		message.delete();
+
 		//get the lobby object from the client
-		const { lobby } = message.client;
+		const lobby= message.client.lobbyMap.get(message.guild.id);
+
+		console.log(lobby.lobbyChannel().id);
 
 		const user = message.author;
 
