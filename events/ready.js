@@ -1,13 +1,12 @@
+const LobbyClass = require('../classes/lobby.js');
+
 module.exports = (client) => {
 	
 	var lobbyMap = new Map();
 
-	//console.log(client.guilds);
-
 	//create a lobby for each server the client operates within
 	client.guilds.forEach(async(guild) => {
 
-		const LobbyClass = require('../classes/lobby.js');
 		const newLobby = new LobbyClass();
 
 		/*

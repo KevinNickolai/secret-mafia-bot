@@ -2,12 +2,11 @@ module.exports = {
 	name: 'dequeue',
 	aliases: ['dq'],
 	description: "Dequeues the user from the Mafia queue.",
+	guildUnique: true,
 	execute(message,args){
 		const user = message.author;
 
-		const lobby= message.client.lobbyMap.get(message.guild.id);
-
-		console.log(message.guild.id);
+		const lobby = message.client.lobbyMap.get(message.guild.id);
 		
 		const dequeued = lobby.removePlayer(user);
 		

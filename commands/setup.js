@@ -12,6 +12,7 @@ module.exports = {
 					<${removeArg}>   <setupCode> | Remove a setup with a given code from the random list
 					<${randomArgs.join("/")}> <playerNumber> | Get a random setup from the list`,
 	args: true,
+	guildUnique: true,
 	execute(message,args){
 
 		const { database } = message.client;

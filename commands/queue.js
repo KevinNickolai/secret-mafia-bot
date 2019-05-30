@@ -9,14 +9,11 @@ module.exports = {
 	aliases: ['q'],
 	description: "Queues the user for a Mafia game for a given amount of time (in minutes).",
 	usage: `<time (minimum: ${minimumQueueTime}, maximum: ${maximumQueueTime}, default: ${defaultQueueTime}>`,
+	guildUnique: true,
 	execute(message, args){
 
-		message.delete();
-
 		//get the lobby object from the client
-		const lobby= message.client.lobbyMap.get(message.guild.id);
-
-		console.log(lobby.lobbyChannel().id);
+		const lobby = message.client.lobbyMap.get(message.guild.id);
 
 		const user = message.author;
 
@@ -38,7 +35,7 @@ module.exports = {
 				queueTime = minimumQueueTime;
 			}else if(time >= maximumQueueTime){	//< time greater than maxQueueTime assume max time requested
 				queueTime = maximumQueueTime;
-			} else{ //< otherwise, time was within the minimum-maximum range and can be assigned as a queueTime
+			}else{ //< otherwise, time was within the minimum-maximum range and can be assigned as a queueTime
 				queueTime = time;
 			}
 		}

@@ -6,9 +6,11 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-//set a command for each file in the commands directory
+/*
+* Set a command for each file in the commands directory
+*/
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -16,9 +18,6 @@ for (const file of commandFiles) {
 	// with the key as the command name and the value as the exported module
 	client.commands.set(command.name, command);
 }
-
-//set the client's lobby
-//client.lobby = require('./classes/lobby.js');
 
 /*
 * Create and initialize a database
