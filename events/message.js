@@ -9,6 +9,10 @@ module.exports = (client, message) => {
 	//if the message isn't a command or is a message from another bot, we don't need to process it
 	if(!message.content.startsWith(prefix) || message.author.bot) return;
 
+	if(message.guild){
+		message.delete();
+	}
+
 	//split up the message into arguments, with whitespace as the delimiter,
 	//while also removing the command prefix from the message
 	const args = message.content.slice(prefix.length).split(/ +/);
@@ -34,10 +38,6 @@ module.exports = (client, message) => {
 	if(command.guildUnique && !message.guild){
 		console.log("command send in dms");
 		return user.send(`The ${command.name} command is server unique. Resend the command in the server you intended to query.`);
-	}
-
-	if(message.guild){
-		message.delete();
 	}
 
 	//const guildID = message.guild.id;
