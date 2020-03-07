@@ -168,8 +168,7 @@ Lobby.prototype.setQueueChannel = async function(client, channel){
 	
 	while (this.queueChannel.lastMessageID != '575842249536176158')
 	{
-		console.log(this.queueChannel.lastMessageID);
-		console.log(this.queueChannel.lastMessage);
+		await channel.fetchMessage(this.queueChannel.lastMessageID).delete();
 	}
 
 	//since this is an async function, we're using await to make sure that the 
