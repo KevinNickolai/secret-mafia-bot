@@ -1,4 +1,4 @@
-function Lobby(){
+function Lobby() {
 
 	this.minimumPlayers = 9;
 
@@ -115,9 +115,9 @@ Lobby.prototype.displayPlayers = function(){
 	return retPlayersString;
 }
 
-/*
+/**
 * Attepmt to remove a player from the current lobby
-* @param {User} the player we're attempting to remove
+* @param {Discord.User} player the player we're attempting to remove
 * @param {boolean} toTime flag indicating if the player is being removed due to time
 * @return {boolean} true if the player was removed successfully, false otherwise
 */
@@ -158,13 +158,18 @@ Lobby.prototype.size = function(){
 	return this.players.length;
 }
 
-/*
+/**
 * Set the queue channel the lobby will use to display and take queue requests
-* @param {Client} client The discord client connection that the bot interfaces with
-* @param {Channel} channel The discord text channel the bot uses for queue related information
+* @param {Discord.Client} client The discord client connection that the bot interfaces with
+* @param {Discord.TextChannel} channel The discord text channel the bot uses for queue related information
 */
 Lobby.prototype.setQueueChannel = async function(client, channel){
 	this.queueChannel = channel;
+	
+	while (this.queueChannel.lastMessageID != '575842249536176158')
+	{
+		this.queueChannel.lastMessage.delete()
+	}
 
 	//since this is an async function, we're using await to make sure that the 
 	//promise of the fetchMessage function goes through, so that this.queueMessage
