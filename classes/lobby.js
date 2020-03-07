@@ -165,11 +165,23 @@ Lobby.prototype.size = function(){
 */
 Lobby.prototype.setQueueChannel = async function(client, channel){
 	this.queueChannel = channel;
+
 	/*
-	while (this.queueChannel.lastMessageID != '575842249536176158')
+	 * Delete all messages that aren't the queue channel list message
+	 * as long as the queue channel list message doesn't exist in the list.
+	 */
+	do
 	{
-		await channel.fetchMessage(this.queueChannel.lastMessageID).delete();
-	}*/
+		var toDelete = await channel.fetchMessages({ limit: 100 });
+		for (let [key, value] of toDelete)
+		{
+			if (key != '575842249536176158')
+			{
+				toDelete.get(key.toString()).delete();
+			}
+		}
+	}
+	while (toDelete.get('575842249536176158') == undefined);
 
 	//since this is an async function, we're using await to make sure that the 
 	//promise of the fetchMessage function goes through, so that this.queueMessage
