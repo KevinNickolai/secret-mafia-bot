@@ -1,3 +1,10 @@
+/*
+ * Queue and Dequeue commands, used to build a help message in the queue channel
+ */
+const cmdQueue = require('../commands/queue.js');
+const cmdDequeue = require('../commands/dequeue.js');
+const { prefix } = require('../config.js');
+
 function Lobby() {
 
 	this.minimumPlayers = 9;
@@ -167,6 +174,29 @@ Lobby.prototype.setQueueChannel = async function(client, channel){
 	this.queueChannel = channel;
 
 	/*
+	 * Add a message to the queue channel to indicate the queue commands
+	 */
+	data = [];
+	data.push('*');
+	data.push(`**Name:** ${cmdQueue.name}`);
+
+	if (cmdQueue.aliases) data.push(`*Aliases:* ${cmdQueue.aliases.join(', ')}`);
+	if (cmdQueue.description) data.push(`*Description:* ${cmdQueue.description}`);
+	if (cmdQueue.usage) data.push(`*Usage:* ${prefix}${cmdQueue.name} ${cmdQueue.usage}`);
+
+	data.push('');
+
+	data.push(`**Name:** ${cmdDequeue.name}`);
+
+	if (cmdDequeue.aliases) data.push(`*Aliases:* ${cmdDequeue.aliases.join(', ')}`);
+	if (cmdDequeue.description) data.push(`*Description:* ${cmdDequeue.description}`);
+	if (cmdDequeue.usage) data.push(`*Usage:* ${prefix}${cmdDequeue.name} ${cmdDequeue.usage}`);
+
+	data.push('*');
+
+	var queueCommandMessage = await channel.send(data, { split: true });
+
+	/*
 	 * Delete all messages that aren't the queue channel list message
 	 * as long as the queue channel list message doesn't exist in the list.
 	 */
@@ -175,7 +205,7 @@ Lobby.prototype.setQueueChannel = async function(client, channel){
 		var toDelete = await channel.fetchMessages({ limit: 100 });
 		for (let [key, value] of toDelete)
 		{
-			if (key != '575842249536176158')
+			if (key != '575842249536176158' && key != queueCommandMessage.id)
 			{
 				toDelete.get(key.toString()).delete();
 			}

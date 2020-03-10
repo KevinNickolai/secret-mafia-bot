@@ -1,4 +1,8 @@
+*.vs
+*.njsproj
 
 *.env
 
 node_modules
+
+

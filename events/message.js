@@ -10,7 +10,7 @@ module.exports = (client, message) => {
 	const { prefix } = require('../config.js');
 
 	//if the channel the message was sent in was the lobby channel, delete the message from the channel
-	if(message.channel.id === lobby.lobbyChannel().id){
+	if(message.channel.id === lobby.lobbyChannel().id && !message.author.bot){
 		message.delete();
 	}
 
