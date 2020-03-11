@@ -1,6 +1,6 @@
 *.vs
 *.njsproj
-
+*.sln
 *.env
 
 node_modules
