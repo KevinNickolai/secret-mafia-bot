@@ -7,13 +7,25 @@ const { prefix } = require('../config.js');
 
 function Lobby() {
 
+	/*
+	 * Minimum number of players to begin a lobby
+	 */ 
 	this.minimumPlayers = 7;
 
+	/*
+	 * Array of players in the lobby
+	 */
 	this.players = [];
 
+	/*
+	 * Discord.Channel Associated with the lobby
+	 */
 	this.queueChannel = {};
 
-	this.queueMessage;// = '```AMONG US Queue\n-----```';
+	/*
+	 * Discord.Message associated with displaying and updating lobby changes
+	 */
+	this.queueMessage;
 };
 
 /*
@@ -21,8 +33,8 @@ function Lobby() {
 */
 Lobby.prototype.updateQueueMessage = function(){
 	this.queueMessage.edit(
-	'```Queue: ' + this.players.length + '/' + this.minimumPlayers +
-	'\n--------- \n' + 
+	'```AMONG US Queue: ' + this.players.length + '/' + this.minimumPlayers +
+	'\n---------- \n' + 
 	this.displayPlayers() +
 	'```');
 }
