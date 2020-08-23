@@ -7,13 +7,13 @@ const { prefix } = require('../config.js');
 
 function Lobby() {
 
-	this.minimumPlayers = 9;
+	this.minimumPlayers = 7;
 
 	this.players = [];
 
 	this.queueChannel = {};
 
-	this.queueMessage;// = '```Queue \n-----```';
+	this.queueMessage;// = '```AMONG US Queue\n-----```';
 };
 
 /*
